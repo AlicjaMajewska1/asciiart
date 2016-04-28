@@ -20,7 +20,7 @@ public class ImageFileReaderTest {
 	}
 
 	@Test
-	public void shouldReadSequenceFrom0To255GivenTestImage() {
+	public void shouldReadSequenceFrom0To255GivenTestImage() throws Exception {
 		// given
 		String fileName = "testImage.pgm";
 		// when
@@ -40,7 +40,7 @@ public class ImageFileReaderTest {
 	}
 	
 	@Test
-	public void shouldThrowExceptionWhenFileDontExist() {
+	public void shouldThrowExceptionWhenFileDontExist() throws Exception {
 		// given
 		String fileName = "nonexistent.pgm";
 		try {
@@ -48,7 +48,7 @@ public class ImageFileReaderTest {
 			imageReader.readPgmFile(fileName);
 			// then
 			Assert.fail("Should throw exception");
-		} catch (URISyntaxException e) {
+		} catch (NullPointerException e) {
 			// tego się spodziewaliśmy, nic więcej nie trzeba sprawdzać
 		}
 		

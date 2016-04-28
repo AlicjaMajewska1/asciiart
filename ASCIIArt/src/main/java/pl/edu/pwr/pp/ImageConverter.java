@@ -7,6 +7,7 @@ public class ImageConverter {
 	 * do białego (255).
 	 */
 	public static String INTENSITY_2_ASCII = "@%#*+=-:. ";
+	public static final int ZAKRES = 256;
 
 	/**
 	 * Metoda zwraca znak odpowiadający danemu odcieniowi szarości. Odcienie
@@ -21,8 +22,8 @@ public class ImageConverter {
 	 * @return znak odpowiadający zadanemu odcieniowi szarości
 	 */
 	public static char intensityToAscii(int intensity) {
-		// TODO Wasz kod
-		return 0;
+		
+		return INTENSITY_2_ASCII.charAt(intensity * INTENSITY_2_ASCII.length()/ ZAKRES);
 	}
 
 	/**
@@ -35,8 +36,22 @@ public class ImageConverter {
 	 * @return tablica znaków ASCII
 	 */
 	public static char[][] intensitiesToAscii(int[][] intensities) {
-		// TODO Wasz kod
-		return null;
+		int columns =  intensities[0].length;
+		int  rows = intensities.length;
+		char[][] characters = new char[rows][columns];
+		for (char[] cs : characters) {
+			for (char c : cs) {
+				System.out.print(c);
+			}
+		System.out.println("");
+		}
+		
+		for (int i = 0; i < rows; ++i) {
+			for (int j = 0; j < columns; ++j) {
+				characters[i][j] = intensityToAscii(intensities[i][j]);
+			}
+		}
+		return characters;
 	}
 
 }

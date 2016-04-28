@@ -4,7 +4,7 @@ import java.net.URISyntaxException;
 
 public class AsciiArtApplication {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		
 		String[] images = new String[]{"Marilyn_Monroe", "Mona_Lisa", "Sierpinski_Triangle"};
 		String pgmExtension = ".pgm";
