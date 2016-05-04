@@ -49,7 +49,6 @@ public class ImageFileReaderTest {
 			// then
 			Assert.fail("Should throw exception");
 		} catch (NullPointerException e) {
-			// tego się spodziewaliśmy, nic więcej nie trzeba sprawdzać
 		}
 		
 	}

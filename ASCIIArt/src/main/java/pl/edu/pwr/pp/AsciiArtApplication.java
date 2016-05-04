@@ -15,11 +15,8 @@ public class AsciiArtApplication {
 		
 		for (String imageName : images) {
 			try {
-				// przeczytaj plik pgm
 				int[][] intensities = imageFileReader.readPgmFile(imageName + pgmExtension);
-				// przekształć odcienie szarości do znaków ASCII
 				char[][] ascii = ImageConverter.intensitiesToAscii(intensities);
-				// zapisz ASCII art do pliku tekstowego
 				imageFileWriter.saveToTxtFile(ascii, imageName + txtExtension);
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
