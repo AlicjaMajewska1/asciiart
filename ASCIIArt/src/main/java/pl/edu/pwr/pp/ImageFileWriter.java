@@ -5,13 +5,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
-import java.time.LocalTime;
 
 public class ImageFileWriter {
 
 	public void saveToTxtFile(char[][] ascii, String fileName) throws URISyntaxException, IOException {
 
-		File file = new File("src/main/resources/" + fileName);
+		File file = new File(getPathToFile(fileName));
 		file.createNewFile();
 
 		int columns = ascii[0].length;
@@ -20,11 +19,6 @@ public class ImageFileWriter {
 		PrintWriter printWriter;
 		try {
 			printWriter = new PrintWriter(file);
-
-			printWriter.println("P2");
-			printWriter.println("# Converted by Ala Asia at " + LocalTime.now().toString());
-			printWriter.println(columns + " " + rows);
-			printWriter.println("255");
 			for (char[] cs : ascii) {
 				printWriter.println(cs);
 			}
@@ -35,6 +29,17 @@ public class ImageFileWriter {
 			e.printStackTrace();
 		}
 
+	}
+
+	private String getPathToFile(String fileName) throws URISyntaxException {
+
+		String path = null;
+		if (fileName.contains("\\") || fileName.contains("/")) {
+			path = fileName;
+		} else {
+			path = "src/main/resources/" + fileName;
+		}
+		return path;
 	}
 
 }

@@ -1,12 +1,11 @@
 package pl.edu.pwr.pp;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class ImageFileReader {
 
@@ -23,16 +22,18 @@ public class ImageFileReader {
 		int rows = 0;
 		int[][] intensities = null;
 		try {
-			Path path = this.getPathToFile(fileName);
+			File file = new File(getPathStringToFile(fileName));
+			file.toPath();
+			// Path path = this.getPathToFile(fileName);
 
-			try (BufferedReader reader = Files.newBufferedReader(path)) {
+			try (BufferedReader reader = Files.newBufferedReader(file.toPath())) {
 
 				String[] columnAndRow = readHeader(reader);
 				columns = Integer.parseInt(columnAndRow[0]);
 				rows = Integer.parseInt(columnAndRow[1]);
 				intensities = createIntensitiesTable(columns, rows, reader);
 				fillIntensitiesTable(columns, intensities, reader);
-				
+
 			} catch (URISyntaxException e) {
 				throw e;
 			}
@@ -50,8 +51,7 @@ public class ImageFileReader {
 		while ((line = reader.readLine()) != null) {
 			String[] elements = line.split(" ");
 			for (int i = 0; i < elements.length; i++) {
-				intensities[currentRow][currentColumn] = Integer
-						.parseInt(elements[i]);
+				intensities[currentRow][currentColumn] = Integer.parseInt(elements[i]);
 				currentColumn++;
 				if (currentColumn == columns) {
 					currentColumn = 0;
@@ -82,9 +82,13 @@ public class ImageFileReader {
 		return columnAndRow;
 	}
 
-	private Path getPathToFile(String fileName) throws URISyntaxException {
-		URI uri = ClassLoader.getSystemResource(fileName).toURI();
-		return Paths.get(uri);
-	}
 
+	private String getPathStringToFile(String fileName) throws URISyntaxException {
+		if (fileName.contains("\\") || fileName.contains("/")) {
+			return fileName;
+		}
+		URI uri = ClassLoader.getSystemResource(fileName).toURI();
+		return uri.getPath();
+	}
+	
 }

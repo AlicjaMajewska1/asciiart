@@ -18,6 +18,7 @@ public class ImageComponent extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private BufferedImage image;
 	private File file;
+	private String path = "";
 
 	public ImageComponent() {
 
@@ -25,6 +26,7 @@ public class ImageComponent extends JPanel {
 
 	public void loadImage(String path) {
 		try {
+			this.path = path;
 			file = new File(path);
 			FileInputStream fis = new FileInputStream(file);
 
@@ -47,6 +49,11 @@ public class ImageComponent extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(image, 0, 0, null);
+	}
+
+	public String  getImagePath() {
+		return path;
+		
 	}
 
 	public String getImageName() {
