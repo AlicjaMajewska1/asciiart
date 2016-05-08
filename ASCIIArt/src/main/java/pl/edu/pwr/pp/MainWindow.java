@@ -11,10 +11,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Font;
+import javax.swing.JScrollPane;
 
 public class MainWindow {
 
 	private JFrame frame;
+	private ImageComponent imagePanel;
+	private JButton btnZapiszDoPliku;
+	private JPanel panel;
 
 	/**
 	 * Launch the application.
@@ -48,7 +52,7 @@ public class MainWindow {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JPanel panel = new JPanel();
+	    panel = new JPanel();
 		panel.setBackground(new Color(255, 153, 204));
 		panel.setBounds(10, 11, 128, 250);
 		frame.getContentPane().add(panel, BorderLayout.NORTH);
@@ -57,10 +61,12 @@ public class MainWindow {
 		JButton btnWczytajObraz = new JButton("Wczytaj obraz");
 		btnWczytajObraz.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		btnWczytajObraz.setBackground(new Color(255, 255, 255));
+		final MainWindow mainWindow = this;
 		btnWczytajObraz.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent e) {
-				WczytajObrazDialog wczytaj = new WczytajObrazDialog();
-				wczytaj.showWindow();
+				WczytajObrazDialog wczytaj = new WczytajObrazDialog(mainWindow);
+				wczytaj.showWindow();				
 			}
 		});
 		btnWczytajObraz.setBounds(10, 22, 101, 23);
@@ -76,9 +82,10 @@ public class MainWindow {
 		lblOpcja_1.setBounds(39, 98, 32, 14);
 		panel.add(lblOpcja_1);
 		
-		JButton btnZapiszDoPliku = new JButton("Zapisz do pliku");
+		btnZapiszDoPliku = new JButton("Zapisz do pliku");
 		btnZapiszDoPliku.setBackground(new Color(255, 255, 255));
 		btnZapiszDoPliku.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		btnZapiszDoPliku.setEnabled(false);
 		btnZapiszDoPliku.setBounds(10, 138, 101, 23);
 		panel.add(btnZapiszDoPliku);
 		
@@ -96,9 +103,25 @@ public class MainWindow {
 		button.setBounds(10, 216, 101, 23);
 		panel.add(button);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(new Color(255, 153, 204));
-		panel_1.setBounds(148, 11, 295, 250);
-		frame.getContentPane().add(panel_1);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setBounds(148, 11, 293, 248);
+		frame.getContentPane().add(scrollPane);
+		imagePanel = new ImageComponent();
+		scrollPane.setViewportView(imagePanel);
+		imagePanel.setBackground(new Color(255, 153, 204));
 	}
+
+
+	public void loadImageToWindow(String path){
+		imagePanel.loadImage(path);
+		if (imagePanel.getImage() != null) {
+			imagePanel.setSize(imagePanel.getImage().getWidth(),imagePanel.getImage().getHeight()); 
+		}
+		btnZapiszDoPliku.setEnabled(imagePanel.getImageName().toLowerCase().contains(".pgm"));
+		imagePanel.repaint();
+	}
+
+	
 }
