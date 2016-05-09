@@ -55,7 +55,6 @@ public class ImageFileWriterTest {
 
 		}
 		//then
-		assertThat(columnsAndRows, is(equalTo(columns + " " + rows)));
 		for (String contentLineTest : contentLines) {
 			assertThat(contentLineTest, is(equalTo(contentLine)));
 		}

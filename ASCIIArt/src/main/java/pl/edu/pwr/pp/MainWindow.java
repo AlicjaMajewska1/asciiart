@@ -23,6 +23,12 @@ public class MainWindow {
 	private ImageComponent imagePanel;
 	private JButton btnZapiszDoPliku;
 	private JPanel panel;
+	private JButton btnWczytajObraz;
+	private JLabel lblOpcja1;
+	private JLabel lblOpcja2;
+	private JButton btnFunkcja1;
+	private JButton btnFunkcja2;
+	private JScrollPane scrollPane;
 
 	/**
 	 * Launch the application.
@@ -62,7 +68,7 @@ public class MainWindow {
 		frame.getContentPane().add(panel, BorderLayout.NORTH);
 		panel.setLayout(null);
 
-		JButton btnWczytajObraz = new JButton("Wczytaj obraz");
+		btnWczytajObraz = new JButton("Wczytaj obraz");
 		btnWczytajObraz.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		btnWczytajObraz.setBackground(new Color(255, 255, 255));
 		final MainWindow mainWindow = this;
@@ -76,15 +82,15 @@ public class MainWindow {
 		btnWczytajObraz.setBounds(10, 22, 101, 23);
 		panel.add(btnWczytajObraz);
 
-		JLabel lblOpcja = new JLabel("opcja1");
-		lblOpcja.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		lblOpcja.setBounds(39, 71, 32, 14);
-		panel.add(lblOpcja);
+		lblOpcja1 = new JLabel("opcja1");
+		lblOpcja1.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		lblOpcja1.setBounds(39, 71, 32, 14);
+		panel.add(lblOpcja1);
 
-		JLabel lblOpcja_1 = new JLabel("opcja2");
-		lblOpcja_1.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		lblOpcja_1.setBounds(39, 98, 32, 14);
-		panel.add(lblOpcja_1);
+		lblOpcja2 = new JLabel("opcja2");
+		lblOpcja2.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		lblOpcja2.setBounds(39, 98, 32, 14);
+		panel.add(lblOpcja2);
 
 		btnZapiszDoPliku = new JButton("Zapisz do pliku");
 		btnZapiszDoPliku.setBackground(new Color(255, 255, 255));
@@ -102,18 +108,15 @@ public class MainWindow {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					ImageFileReader imageFileReader = new ImageFileReader();
 					try {
-					int[][] image = imageFileReader.readPgmFile(imagePanel.getImagePath());
-					char[][] ascii = ImageConverter.intensitiesToAscii(image);
-					ImageFileWriter imageFileWriter = new ImageFileWriter();
-
-				
-						imageFileWriter.saveToTxtFile(ascii, chooser.getSelectedFile().getAbsolutePath());
+						int[][] image = imageFileReader.readPgmFile(imagePanel.getImagePath());
+						ImageFileWriter imageFileWriter = new ImageFileWriter();
+						imageFileWriter.saveToTxtFile(ImageConverter.intensitiesToAscii(image), chooser.getSelectedFile().getAbsolutePath());
 					} catch (URISyntaxException | IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						ErrorWindow errorWindow = new ErrorWindow("Wybrano niepoprawn¹ scie¿kê do pliku.");
+						errorWindow.showWindow();
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						ErrorWindow errorWindow = new ErrorWindow(e.getMessage());
+						errorWindow.showWindow();
 					}
 				}
 
@@ -121,22 +124,22 @@ public class MainWindow {
 		});
 		panel.add(btnZapiszDoPliku);
 
-		JButton btnFunkcja = new JButton("Funkcja 1");
-		btnFunkcja.setEnabled(false);
-		btnFunkcja.setBounds(10, 182, 101, 23);
-		panel.add(btnFunkcja);
+		btnFunkcja1 = new JButton("Funkcja 1");
+		btnFunkcja1.setEnabled(false);
+		btnFunkcja1.setBounds(10, 182, 101, 23);
+		panel.add(btnFunkcja1);
 
-		JButton button = new JButton("Funkcja 2");
-		button.setEnabled(false);
-		button.addActionListener(new ActionListener() {
+		btnFunkcja2 = new JButton("Funkcja 2");
+		btnFunkcja2.setEnabled(false);
+		btnFunkcja2.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		button.setBounds(10, 216, 101, 23);
-		panel.add(button);
+		btnFunkcja2.setBounds(10, 216, 101, 23);
+		panel.add(btnFunkcja2);
 
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setBounds(148, 11, 293, 248);
