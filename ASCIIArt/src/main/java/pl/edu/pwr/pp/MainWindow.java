@@ -9,13 +9,12 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JComboBox;
 
 public class MainWindow {
 
@@ -24,7 +23,6 @@ public class MainWindow {
 	private JButton btnZapiszDoPliku;
 	private JPanel panel;
 	private JButton btnWczytajObraz;
-	private JLabel lblOpcja1;
 	private JLabel lblOpcja2;
 	private JButton btnFunkcja1;
 	private JButton btnFunkcja2;
@@ -58,14 +56,14 @@ public class MainWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 469, 310);
+		frame.setBounds(100, 100, 475, 339);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
 		panel = new JPanel();
+		panel.setBounds(10, 11, 128, 279);
 		panel.setBackground(new Color(255, 153, 204));
-		panel.setBounds(10, 11, 128, 250);
-		frame.getContentPane().add(panel, BorderLayout.NORTH);
+		frame.getContentPane().add(panel);
 		panel.setLayout(null);
 
 		btnWczytajObraz = new JButton("Wczytaj obraz");
@@ -82,14 +80,9 @@ public class MainWindow {
 		btnWczytajObraz.setBounds(10, 22, 101, 23);
 		panel.add(btnWczytajObraz);
 
-		lblOpcja1 = new JLabel("opcja1");
-		lblOpcja1.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		lblOpcja1.setBounds(39, 71, 32, 14);
-		panel.add(lblOpcja1);
-
 		lblOpcja2 = new JLabel("opcja2");
 		lblOpcja2.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		lblOpcja2.setBounds(39, 98, 32, 14);
+		lblOpcja2.setBounds(20, 112, 32, 14);
 		panel.add(lblOpcja2);
 
 		btnZapiszDoPliku = new JButton("Zapisz do pliku");
@@ -106,20 +99,8 @@ public class MainWindow {
 				chooser.setFileFilter(filter);
 				int returnVal = chooser.showOpenDialog(null);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					ImageFileReader imageFileReader = new ImageFileReader();
-					try {
-						int[][] image = imageFileReader.readPgmFile(imagePanel.getImagePath());
-						ImageFileWriter imageFileWriter = new ImageFileWriter();
-						imageFileWriter.saveToTxtFile(ImageConverter.intensitiesToAscii(image), chooser.getSelectedFile().getAbsolutePath());
-					} catch (URISyntaxException | IOException e) {
-						ErrorWindow errorWindow = new ErrorWindow("Wybrano niepoprawn¹ scie¿kê do pliku.");
-						errorWindow.showWindow();
-					} catch (Exception e) {
-						ErrorWindow errorWindow = new ErrorWindow(e.getMessage());
-						errorWindow.showWindow();
-					}
+					imagePanel.saveImage(chooser.getSelectedFile().getAbsolutePath());
 				}
-
 			}
 		});
 		panel.add(btnZapiszDoPliku);
@@ -138,15 +119,26 @@ public class MainWindow {
 		});
 		btnFunkcja2.setBounds(10, 216, 101, 23);
 		panel.add(btnFunkcja2);
+		
+		JComboBox qualityComboBox = new JComboBox();
+		qualityComboBox.setBounds(10, 81, 101, 20);
+		qualityComboBox.addItem(QualityEnum.LOW);
+		qualityComboBox.addItem(QualityEnum.HIGH);
+		panel.add(qualityComboBox);
+		
+		JLabel lblJako = new JLabel("Jako\u015B\u0107");
+		lblJako.setBounds(10, 56, 46, 14);
+		panel.add(lblJako);
 
 		scrollPane = new JScrollPane();
+		scrollPane.setBounds(148, 11, 293, 279);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setBounds(148, 11, 293, 248);
 		frame.getContentPane().add(scrollPane);
 		imagePanel = new ImageComponent();
 		scrollPane.setViewportView(imagePanel);
 		imagePanel.setBackground(new Color(255, 153, 204));
+		imagePanel.setLayout(null);
 	}
 
 	public void loadImageToWindow(String path) {
@@ -154,8 +146,7 @@ public class MainWindow {
 		if (imagePanel.getImage() != null) {
 			imagePanel.setSize(imagePanel.getImage().getWidth(), imagePanel.getImage().getHeight());
 		}
-		btnZapiszDoPliku.setEnabled(imagePanel.getImageName().toLowerCase().contains(".pgm"));
+		btnZapiszDoPliku.setEnabled(imagePanel.getImage() != null);
 		imagePanel.repaint();
 	}
-
 }

@@ -7,6 +7,7 @@ public class ImageConverter {
 	 * (0) do białego (255).
 	 */
 	public static String INTENSITY_2_ASCII = "@%#*+=-:. ";
+	"$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. "
 	public static final int ZAKRES = 256;
 
 	/**
@@ -34,9 +35,10 @@ public class ImageConverter {
 	 * 
 	 * @param intensities
 	 *            tablica odcieni szarości obrazu
+	 * @param quality 
 	 * @return tablica znaków ASCII
 	 */
-	public static char[][] intensitiesToAscii(int[][] intensities) {
+	public static char[][] intensitiesToAscii(int[][] intensities, QualityEnum quality) {
 		int columns = intensities[0].length;
 		int rows = intensities.length;
 		char[][] characters = new char[rows][columns];

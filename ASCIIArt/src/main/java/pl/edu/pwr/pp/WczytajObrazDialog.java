@@ -104,9 +104,7 @@ public class WczytajObrazDialog {
 						btnOk.setEnabled(true);
 					}
 				}
-
 			}
-
 		});
 		btnWybierzPlik.setBounds(200, 17, 150, 23);
 		panel.add(btnWybierzPlik);

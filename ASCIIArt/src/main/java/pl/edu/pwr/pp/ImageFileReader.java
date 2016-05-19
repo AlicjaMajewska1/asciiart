@@ -24,7 +24,6 @@ public class ImageFileReader {
 		try {
 			File file = new File(getPathStringToFile(fileName));
 			file.toPath();
-			// Path path = this.getPathToFile(fileName);
 
 			try (BufferedReader reader = Files.newBufferedReader(file.toPath())) {
 
