@@ -26,6 +26,9 @@ public class WczytajObrazDialog {
 	private JRadioButton rdbtnZDysku;
 	private JRadioButton rdbtnZAdresuUrl;
 	private MainWindow mainWindow;
+	private JPanel panel;
+	private JLabel lblSciekaDoPliku;
+	private JLabel lblWczytajPlik;
 
 	/**
 	 * Create the application.
@@ -46,25 +49,9 @@ public class WczytajObrazDialog {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.getContentPane().setBackground(new Color(255, 204, 255));
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-
-		JLabel lblWczytajPlik = new JLabel("Wczytaj plik ...");
-		lblWczytajPlik.setBounds(26, 11, 232, 14);
-		frame.getContentPane().add(lblWczytajPlik);
-
-		final JPanel panel = new JPanel();
-		panel.setBackground(new Color(255, 153, 204));
-		panel.setBounds(26, 32, 370, 146);
-		frame.getContentPane().add(panel);
-		panel.setLayout(null);
-
-		final JLabel lblSciekaDoPliku = new JLabel("");
-		lblSciekaDoPliku.setBounds(30, 50, 300, 14);
-		panel.add(lblSciekaDoPliku);
+		initializeFrame();
+		initializePanel();
+		initializeLabels();
 
 		final JButton btnOk = new JButton("OK");
 		btnOk.setBackground(new Color(255, 255, 255));
@@ -116,7 +103,6 @@ public class WczytajObrazDialog {
 			public void actionPerformed(ActionEvent ae) {
 				btnWybierzPlik.setEnabled(rdbtnZDysku.isSelected());
 				btnOk.setEnabled(lblSciekaDoPliku.getText().length() > 0);
-
 			}
 		});
 
@@ -154,12 +140,6 @@ public class WczytajObrazDialog {
 		});
 		panel.add(rdbtnZAdresuUrl);
 
-		JLabel label = new JLabel("");
-		label.setEnabled(false);
-		label.setBackground(new Color(255, 255, 153));
-		label.setBounds(20, 300, 315, 14);
-		panel.add(label);
-
 		JButton btnAnuluj = new JButton("Anuluj");
 		btnAnuluj.setBackground(new Color(255, 255, 255));
 		btnAnuluj.setBounds(280, 189, 89, 23);
@@ -170,6 +150,32 @@ public class WczytajObrazDialog {
 			}
 		});
 		frame.getContentPane().add(btnAnuluj);
+	}
+
+	private void initializeLabels() {
+		lblWczytajPlik = new JLabel("Wczytaj plik ...");
+		lblWczytajPlik.setBounds(26, 11, 232, 14);
+		frame.getContentPane().add(lblWczytajPlik);
+
+		lblSciekaDoPliku = new JLabel("");
+		lblSciekaDoPliku.setBounds(30, 50, 300, 14);
+		panel.add(lblSciekaDoPliku);
+	}
+
+	private void initializePanel() {
+		panel = new JPanel();
+		panel.setBackground(new Color(255, 153, 204));
+		panel.setBounds(26, 32, 370, 146);
+		frame.getContentPane().add(panel);
+		panel.setLayout(null);
+	}
+
+	private void initializeFrame() {
+		frame = new JFrame();
+		frame.getContentPane().setBackground(new Color(255, 204, 255));
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
 	}
 
 }

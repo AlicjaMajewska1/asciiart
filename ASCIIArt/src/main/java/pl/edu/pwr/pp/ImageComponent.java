@@ -55,7 +55,7 @@ public class ImageComponent extends JPanel {
 			if (getImageName().toLowerCase().contains(".pgm")) {
 				pixels = imageFileReader.readPgmFile(getImagePath());
 			} else {
-				pixels = convertToPGM();
+				pixels = convertToGrayIntensities();
 			}
 			ImageFileWriter imageFileWriter = new ImageFileWriter();
 			imageFileWriter.saveToTxtFile(ImageConverter.intensitiesToAscii(pixels, quality), fileToSavePath);
@@ -111,18 +111,23 @@ public class ImageComponent extends JPanel {
 		g.drawImage(image, 0, 0, null);
 	}
 
-	public int[][] convertToPGM() {
+	public int[][] convertToGrayIntensities() {
 
-		int[][] grayIntensities = new int[image.getHeight()][];
-		for (int i = 0; i < image.getHeight(); i++) {
-			grayIntensities[i] = new int[image.getWidth()];
-		}
+		int[][] grayIntensities = createIntensitiesTable();
 		Function<Color, Integer> converter = chooseConverter();
 		for (int y = 0; y < image.getHeight(); ++y) {
 			for (int x = 0; x < image.getWidth(); ++x) {
 				Color color = new Color(image.getRGB(x, y));
 				grayIntensities[y][x] = converter.apply(color).intValue();
 			}
+		}
+		return grayIntensities;
+	}
+
+	private int[][] createIntensitiesTable() {
+		int[][] grayIntensities = new int[image.getHeight()][];
+		for (int i = 0; i < image.getHeight(); i++) {
+			grayIntensities[i] = new int[image.getWidth()];
 		}
 		return grayIntensities;
 	}

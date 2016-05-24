@@ -13,9 +13,6 @@ public class ImageFileWriter {
 		File file = new File(getPathToFile(fileName));
 		file.createNewFile();
 
-		int columns = ascii[0].length;
-		int rows = ascii.length;
-		System.out.println(" rows " + rows );
 		PrintWriter printWriter;
 		try {
 			printWriter = new PrintWriter(file);
