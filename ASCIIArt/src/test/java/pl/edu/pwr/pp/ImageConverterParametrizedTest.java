@@ -41,7 +41,7 @@ public class ImageConverterParametrizedTest {
 
 	@Test
 	public void shouldReturnRightCharacterForIntensity() {
-		MatcherAssert.assertThat(ImageConverter.intensityToAscii(this.input),
+		MatcherAssert.assertThat(ImageConverter.intensityToAscii(this.input, QualityEnum.LOW),
 				Matchers.is(Matchers.equalTo(this.expected)));
 
 	}

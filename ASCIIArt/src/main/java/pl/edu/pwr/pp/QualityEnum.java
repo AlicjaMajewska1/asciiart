@@ -2,7 +2,7 @@ package pl.edu.pwr.pp;
 
 public enum QualityEnum {
 
-	HIGH("Wysoka"), LOW("Niska");
+	 LOW("Niska"), HIGH("Wysoka");
 
 	private final String qualityName;
 
@@ -14,5 +14,6 @@ public enum QualityEnum {
 	public String toString() {
 		return qualityName;
 	}
+	
 
 }

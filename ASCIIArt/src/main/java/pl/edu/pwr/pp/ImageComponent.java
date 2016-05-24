@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -22,6 +23,7 @@ public class ImageComponent extends JPanel {
 	private File file;
 	private String path = "";
 	private QualityEnum quality;
+	private ImageWidthEnum widthEnum;
 
 	public ImageComponent() {
 
@@ -50,7 +52,7 @@ public class ImageComponent extends JPanel {
 			if (getImageName().toLowerCase().contains(".pgm")) {
 				pixels = imageFileReader.readPgmFile(getImagePath());
 			} else {
-				pixels = convertToGray();
+				pixels = convertToPGM();
 			}
 			ImageFileWriter imageFileWriter = new ImageFileWriter();
 			imageFileWriter.saveToTxtFile(ImageConverter.intensitiesToAscii(pixels, quality), fileToSavePath);
@@ -74,27 +76,32 @@ public class ImageComponent extends JPanel {
 		g.drawImage(image, 0, 0, null);
 	}
 
-	public int[][] convertToGray() {
+	public int[][] convertToPGM() {
 
 		int[][] grayIntensities = new int[image.getHeight()][];
 		for (int i = 0; i < image.getHeight(); i++) {
 			grayIntensities[i] = new int[image.getWidth()];
 		}
-		if (image.getType() != BufferedImage.TYPE_BYTE_GRAY) {
-			for (int y = 0; y < image.getHeight(); ++y) {
-				for (int x = 0; x < image.getWidth(); ++x) {
-					Color color = new Color(image.getRGB(x, y));
-					grayIntensities[y][x] = (int) (0.2989 * color.getRed() + 0.5870 * color.getGreen()
-							+ 0.1140 * color.getBlue());
-				}
+		Function<Color, Integer> converter = chooseConverter();
+		for (int y = 0; y < image.getHeight(); ++y) {
+			for (int x = 0; x < image.getWidth(); ++x) {
+				Color color = new Color(image.getRGB(x, y));
+				grayIntensities[y][x] = converter.apply(color).intValue();
 			}
 		}
 		return grayIntensities;
 	}
 
+	private Function<Color, Integer> chooseConverter() {
+		Function<Color, Integer> colorConverter = color -> (int) (0.2989 * color.getRed() + 0.5870 * color.getGreen()
+				+ 0.1140 * color.getBlue());
+		Function<Color, Integer> blackWhiteConverter = color -> (int) ((color.getRed() + color.getGreen()
+				+ color.getBlue()) / 3);
+		return (image.getType() == BufferedImage.TYPE_BYTE_GRAY) ? blackWhiteConverter : colorConverter;
+	}
+
 	public String getImagePath() {
 		return path;
-
 	}
 
 	public String getImageName() {
@@ -111,6 +118,14 @@ public class ImageComponent extends JPanel {
 
 	public void setQuality(QualityEnum quality) {
 		this.quality = quality;
+	}
+
+	public ImageWidthEnum getWidthEnum() {
+		return widthEnum;
+	}
+
+	public void setWidthEnum(ImageWidthEnum widthEnum) {
+		this.widthEnum = widthEnum;
 	}
 
 }

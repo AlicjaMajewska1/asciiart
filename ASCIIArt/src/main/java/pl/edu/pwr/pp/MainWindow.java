@@ -4,7 +4,6 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -27,6 +26,8 @@ public class MainWindow {
 	private JButton btnFunkcja1;
 	private JButton btnFunkcja2;
 	private JScrollPane scrollPane;
+	private JComboBox<QualityEnum> qualityComboBox;
+	private JComboBox<ImageWidthEnum> widhtComboBox;
 
 	/**
 	 * Launch the application.
@@ -61,7 +62,7 @@ public class MainWindow {
 		frame.getContentPane().setLayout(null);
 
 		panel = new JPanel();
-		panel.setBounds(10, 11, 128, 279);
+		panel.setBounds(10, 11, 153, 279);
 		panel.setBackground(new Color(255, 153, 204));
 		frame.getContentPane().add(panel);
 		panel.setLayout(null);
@@ -77,19 +78,19 @@ public class MainWindow {
 				wczytaj.showWindow();
 			}
 		});
-		btnWczytajObraz.setBounds(10, 22, 101, 23);
+		btnWczytajObraz.setBounds(10, 22, 133, 23);
 		panel.add(btnWczytajObraz);
 
-		lblOpcja2 = new JLabel("opcja2");
-		lblOpcja2.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		lblOpcja2.setBounds(20, 112, 32, 14);
+		lblOpcja2 = new JLabel("Szeroko\u015B\u0107 obrazu");
+		lblOpcja2.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		lblOpcja2.setBounds(10, 113, 91, 14);
 		panel.add(lblOpcja2);
 
 		btnZapiszDoPliku = new JButton("Zapisz do pliku");
 		btnZapiszDoPliku.setBackground(new Color(255, 255, 255));
 		btnZapiszDoPliku.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		btnZapiszDoPliku.setEnabled(false);
-		btnZapiszDoPliku.setBounds(10, 138, 101, 23);
+		btnZapiszDoPliku.setBounds(10, 169, 133, 23);
 		btnZapiszDoPliku.addActionListener(new ActionListener() {
 
 			@Override
@@ -99,6 +100,8 @@ public class MainWindow {
 				chooser.setFileFilter(filter);
 				int returnVal = chooser.showOpenDialog(null);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					imagePanel.setWidthEnum((ImageWidthEnum) widhtComboBox.getSelectedItem());
+					imagePanel.setQuality((QualityEnum) qualityComboBox.getSelectedItem());
 					imagePanel.saveImage(chooser.getSelectedFile().getAbsolutePath());
 				}
 			}
@@ -107,7 +110,7 @@ public class MainWindow {
 
 		btnFunkcja1 = new JButton("Funkcja 1");
 		btnFunkcja1.setEnabled(false);
-		btnFunkcja1.setBounds(10, 182, 101, 23);
+		btnFunkcja1.setBounds(10, 211, 133, 23);
 		panel.add(btnFunkcja1);
 
 		btnFunkcja2 = new JButton("Funkcja 2");
@@ -117,21 +120,34 @@ public class MainWindow {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnFunkcja2.setBounds(10, 216, 101, 23);
+		btnFunkcja2.setBounds(10, 245, 133, 23);
 		panel.add(btnFunkcja2);
-		
-		JComboBox qualityComboBox = new JComboBox();
-		qualityComboBox.setBounds(10, 81, 101, 20);
-		qualityComboBox.addItem(QualityEnum.LOW);
-		qualityComboBox.addItem(QualityEnum.HIGH);
+
+		qualityComboBox = new JComboBox<QualityEnum>();
+		qualityComboBox.setBackground(Color.WHITE);
+		qualityComboBox.setBounds(10, 81, 133, 20);
+		for (QualityEnum qualityEnum : QualityEnum.values()) {
+			qualityComboBox.addItem(qualityEnum);
+		}
+		qualityComboBox.setSelectedItem(QualityEnum.LOW);
 		panel.add(qualityComboBox);
-		
+
 		JLabel lblJako = new JLabel("Jako\u015B\u0107");
 		lblJako.setBounds(10, 56, 46, 14);
 		panel.add(lblJako);
 
+		widhtComboBox = new JComboBox<ImageWidthEnum>();
+		widhtComboBox.setBackground(Color.WHITE);
+		widhtComboBox.setBounds(10, 138, 133, 20);
+		for (ImageWidthEnum imageWidthEnum : ImageWidthEnum.values()) {
+			widhtComboBox.addItem(imageWidthEnum);
+		}
+		widhtComboBox.setSelectedItem(ImageWidthEnum.ORIGINAL);
+
+		panel.add(widhtComboBox);
+
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(148, 11, 293, 279);
+		scrollPane.setBounds(173, 11, 268, 279);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		frame.getContentPane().add(scrollPane);

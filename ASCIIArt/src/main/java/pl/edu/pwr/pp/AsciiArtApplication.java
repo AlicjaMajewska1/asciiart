@@ -16,7 +16,7 @@ public class AsciiArtApplication {
 		for (String imageName : images) {
 			try {
 				int[][] intensities = imageFileReader.readPgmFile(imageName + pgmExtension);
-				char[][] ascii = ImageConverter.intensitiesToAscii(intensities);
+				char[][] ascii = ImageConverter.intensitiesToAscii(intensities, QualityEnum.LOW);
 				imageFileWriter.saveToTxtFile(ascii, imageName + txtExtension);
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
