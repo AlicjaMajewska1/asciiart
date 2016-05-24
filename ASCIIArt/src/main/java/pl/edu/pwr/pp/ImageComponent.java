@@ -3,6 +3,9 @@ package pl.edu.pwr.pp;
 import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,7 +41,6 @@ public class ImageComponent extends JPanel {
 			image = ImageIO.read(fis);
 
 		} catch (IOException ex) {
-
 			String errorMessage = "Nie znaleziono pliku " + path;
 			ErrorWindow errorWindow = new ErrorWindow(errorMessage);
 			errorWindow.showWindow();
@@ -46,6 +48,7 @@ public class ImageComponent extends JPanel {
 	}
 
 	public void saveImage(String fileToSavePath) {
+		resizeImage();
 		ImageFileReader imageFileReader = new ImageFileReader();
 		try {
 			int[][] pixels = null;
@@ -63,6 +66,38 @@ public class ImageComponent extends JPanel {
 			ErrorWindow errorWindow = new ErrorWindow(e.getMessage());
 			errorWindow.showWindow();
 		}
+	}
+
+	private void resizeImage() {
+		int width = chooseWidthToResize();
+		int height = (int) image.getHeight() * width / image.getWidth();
+		BufferedImage resizedImage = new BufferedImage(width, height, image.getType());
+		Graphics2D g = resizedImage.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g.drawImage(image, 0, 0, width, height, null);
+		g.dispose();
+		image = resizedImage;
+		this.repaint();
+	}
+
+	private int chooseWidthToResize() {
+		int width;
+		switch (widthEnum) {
+		case SCREEN_WIDTH:
+			Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+			width = (int) screenSize.getWidth();
+			break;
+		case SIGNS80:
+			width = 80;
+			break;
+		case SIGNS160:
+			width = 160;
+			break;
+		default:
+			width = image.getWidth();
+			break;
+		}
+		return width;
 	}
 
 	@Override
