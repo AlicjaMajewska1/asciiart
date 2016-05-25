@@ -11,8 +11,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.function.Function;
 
+import javax.annotation.Resource;
+import javax.annotation.Resources;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
@@ -51,12 +54,8 @@ public class ImageComponent extends JPanel {
 		resizeImage();
 		ImageFileReader imageFileReader = new ImageFileReader();
 		try {
-			int[][] pixels = null;
-			if (getImageName().toLowerCase().contains(".pgm")) {
-				pixels = imageFileReader.readPgmFile(getImagePath());
-			} else {
-				pixels = convertToGrayIntensities();
-			}
+
+			int[][] pixels = convertToGrayIntensities();
 			ImageFileWriter imageFileWriter = new ImageFileWriter();
 			imageFileWriter.saveToTxtFile(ImageConverter.intensitiesToAscii(pixels, quality), fileToSavePath);
 		} catch (URISyntaxException | IOException e) {

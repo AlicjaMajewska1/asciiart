@@ -81,7 +81,6 @@ public class ImageFileReader {
 		return columnAndRow;
 	}
 
-
 	private String getPathStringToFile(String fileName) throws URISyntaxException {
 		if (fileName.contains("\\") || fileName.contains("/")) {
 			return fileName;
@@ -89,5 +88,5 @@ public class ImageFileReader {
 		URI uri = ClassLoader.getSystemResource(fileName).toURI();
 		return uri.getPath();
 	}
-	
+
 }
