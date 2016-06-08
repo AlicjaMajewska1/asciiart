@@ -40,7 +40,7 @@ public class WczytajObrazDialog {
 
 	public void showWindow() {
 		frame.pack();
-		
+
 		frame.setSize(450, 280);
 		frame.setVisible(true);
 	}
@@ -77,33 +77,29 @@ public class WczytajObrazDialog {
 		final JButton btnWybierzPlik = new JButton("Wybierz plik");
 		btnWybierzPlik.setBackground(new Color(255, 255, 255));
 		btnWybierzPlik.setEnabled(false);
-		btnWybierzPlik.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new JFileChooser();
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("PGM JPG GIF PNG JPEG Images", "jpeg",
-						"png", "pgm", "jpg", "gif");
-				chooser.setFileFilter(filter);
-				int returnVal = chooser.showOpenDialog(null);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					lblSciekaDoPliku.setText(chooser.getSelectedFile().getAbsolutePath());
-					if (chooser.getSelectedFile().getAbsolutePath() != null) {
-						btnOk.setEnabled(true);
-					}
+		btnWybierzPlik.addActionListener(event -> {
+			JFileChooser chooser = new JFileChooser();
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("PGM JPG GIF PNG JPEG Images", "jpeg", "png",
+					"pgm", "jpg", "gif");
+			chooser.setFileFilter(filter);
+			int returnVal = chooser.showOpenDialog(null);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				lblSciekaDoPliku.setText(chooser.getSelectedFile().getAbsolutePath());
+				if (chooser.getSelectedFile().getAbsolutePath() != null) {
+					btnOk.setEnabled(true);
 				}
 			}
+
 		});
 		btnWybierzPlik.setBounds(200, 17, 150, 23);
 		panel.add(btnWybierzPlik);
 
 		rdbtnZDysku = new JRadioButton("Z dysku");
 		buttonGroup.add(rdbtnZDysku);
-		rdbtnZDysku.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent ae) {
+		rdbtnZDysku.addActionListener(event -> {
 				btnWybierzPlik.setEnabled(rdbtnZDysku.isSelected());
 				btnOk.setEnabled(lblSciekaDoPliku.getText().length() > 0);
-			}
+			
 		});
 
 		rdbtnZDysku.setBackground(new Color(255, 153, 204));
@@ -118,10 +114,12 @@ public class WczytajObrazDialog {
 			@Override
 			public void keyTyped(KeyEvent e) {
 			}
+
 			@Override
 			public void keyReleased(KeyEvent e) {
 				btnOk.setEnabled(textField.getText().length() > 0);
 			}
+
 			@Override
 			public void keyPressed(KeyEvent e) {
 			}

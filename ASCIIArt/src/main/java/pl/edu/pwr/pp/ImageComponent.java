@@ -7,15 +7,15 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
+import java.util.Base64;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
-import javax.annotation.Resource;
-import javax.annotation.Resources;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
@@ -51,10 +51,9 @@ public class ImageComponent extends JPanel {
 	}
 
 	public void saveImage(String fileToSavePath) {
-		resizeImage();
-		ImageFileReader imageFileReader = new ImageFileReader();
+		image = resizeImage();
+		this.repaint();
 		try {
-
 			int[][] pixels = convertToGrayIntensities();
 			ImageFileWriter imageFileWriter = new ImageFileWriter();
 			imageFileWriter.saveToTxtFile(ImageConverter.intensitiesToAscii(pixels, quality), fileToSavePath);
@@ -67,7 +66,7 @@ public class ImageComponent extends JPanel {
 		}
 	}
 
-	private void resizeImage() {
+	BufferedImage resizeImage() {
 		int width = chooseWidthToResize();
 		int height = (int) image.getHeight() * width / image.getWidth();
 		BufferedImage resizedImage = new BufferedImage(width, height, image.getType());
@@ -75,8 +74,8 @@ public class ImageComponent extends JPanel {
 		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		g.drawImage(image, 0, 0, width, height, null);
 		g.dispose();
-		image = resizedImage;
-		this.repaint();
+		return resizedImage;
+
 	}
 
 	private int chooseWidthToResize() {
@@ -100,11 +99,6 @@ public class ImageComponent extends JPanel {
 	}
 
 	@Override
-	public Dimension getPreferredSize() {
-		return image == null ? super.getPreferredSize() : new Dimension(image.getWidth(), image.getHeight());
-	}
-
-	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		g.drawImage(image, 0, 0, null);
@@ -114,14 +108,20 @@ public class ImageComponent extends JPanel {
 
 		int[][] grayIntensities = createIntensitiesTable();
 		Function<Color, Integer> converter = chooseConverter();
-		for (int y = 0; y < image.getHeight(); ++y) {
-			for (int x = 0; x < image.getWidth(); ++x) {
-				Color color = new Color(image.getRGB(x, y));
-				grayIntensities[y][x] = converter.apply(color).intValue();
-			}
-		}
+
+		IntStream.range(0, image.getHeight()).forEach(y -> IntStream.range(0, image.getWidth()).forEach(x -> {
+			Color color = new Color(image.getRGB(x, y));
+			grayIntensities[y][x] = converter.apply(color).intValue();
+		}));
+		/*
+		 * for (int y = 0; y < image.getHeight(); ++y) { for (int x = 0; x <
+		 * image.getWidth(); ++x) { Color color = new Color(image.getRGB(x, y));
+		 * grayIntensities[y][x] = converter.apply(color).intValue(); } }
+		 */
 		return grayIntensities;
 	}
+
+	
 
 	private int[][] createIntensitiesTable() {
 		int[][] grayIntensities = new int[image.getHeight()][];
@@ -132,6 +132,7 @@ public class ImageComponent extends JPanel {
 	}
 
 	private Function<Color, Integer> chooseConverter() {
+
 		Function<Color, Integer> colorConverter = color -> (int) (0.2989 * color.getRed() + 0.5870 * color.getGreen()
 				+ 0.1140 * color.getBlue());
 		Function<Color, Integer> blackWhiteConverter = color -> (int) ((color.getRed() + color.getGreen()

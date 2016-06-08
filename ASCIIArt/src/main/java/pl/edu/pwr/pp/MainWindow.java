@@ -7,8 +7,6 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JScrollPane;
@@ -68,13 +66,10 @@ public class MainWindow {
 		btnWczytajObraz.setBackground(new Color(255, 255, 255));
 		btnWczytajObraz.setBounds(10, 22, 133, 23);
 		final MainWindow mainWindow = this;
-		btnWczytajObraz.addActionListener(new ActionListener() {
+		btnWczytajObraz.addActionListener(event -> {
+			WczytajObrazDialog wczytaj = new WczytajObrazDialog(mainWindow);
+			wczytaj.showWindow();
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				WczytajObrazDialog wczytaj = new WczytajObrazDialog(mainWindow);
-				wczytaj.showWindow();
-			}
 		});
 		panel.add(btnWczytajObraz);
 
@@ -83,19 +78,16 @@ public class MainWindow {
 		btnZapiszDoPliku.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		btnZapiszDoPliku.setEnabled(false);
 		btnZapiszDoPliku.setBounds(10, 169, 133, 23);
-		btnZapiszDoPliku.addActionListener(new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				JFileChooser chooser = new JFileChooser();
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("TXT file", "txt");
-				chooser.setFileFilter(filter);
-				int returnVal = chooser.showOpenDialog(null);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					imagePanel.setWidthEnum((ImageWidthEnum) widhtComboBox.getSelectedItem());
-					imagePanel.setQuality((QualityEnum) qualityComboBox.getSelectedItem());
-					imagePanel.saveImage(chooser.getSelectedFile().getAbsolutePath());
-				}
+		btnZapiszDoPliku.addActionListener(event -> {
+			JFileChooser chooser = new JFileChooser();
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("TXT file", "txt");
+			chooser.setFileFilter(filter);
+			int returnVal = chooser.showOpenDialog(null);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				imagePanel.setWidthEnum((ImageWidthEnum) widhtComboBox.getSelectedItem());
+				imagePanel.setQuality((QualityEnum) qualityComboBox.getSelectedItem());
+				imagePanel.saveImage(chooser.getSelectedFile().getAbsolutePath());
 			}
 		});
 		panel.add(btnZapiszDoPliku);
